@@ -50,7 +50,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
-          arch: arm64-v8
+          arch: arm64-v8a
           ram-size: 2048M
           disk-size: 5120M
           force-avd-creation: true
@@ -58,7 +58,7 @@ jobs:
           script: |
             wget https://github.com/termux/termux-app/releases/download/${{ env.TERMUX }}/termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
             ./android-commands.sh snapshot termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
-            adb -s emulator-5556 emu avd snapshot save ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
+            adb -s emulator-5554 emu avd snapshot save ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
             echo "Emulator image created."
             pkill -9 qemu-system-x86_64
 
