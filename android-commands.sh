@@ -71,7 +71,7 @@ tests() {
 	return $return_code
 }
 
-#adb logcat &
+adb logcat &
 exit_code=0
 
 if [ $# -eq 1 ]; then
