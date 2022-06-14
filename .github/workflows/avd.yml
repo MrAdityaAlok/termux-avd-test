@@ -28,11 +28,12 @@ jobs:
       matrix:
         api-level: [30]
         target: [default]
-        arch: [arm, aarch64, x86_64, i686]
+        arch: [armeabi-v7a, arm64-v8a, x86_64, x86]
     env:
       TERMUX: v0.118.0
     steps:
       - uses: actions/checkout@v3
+
       - name: AVD cache
         uses: actions/cache@v3
         id: avd-cache
@@ -56,7 +57,7 @@ jobs:
           emulator-options: -no-snapshot-load -noaudio -no-boot-anim -camera-back none
           script: |
             wget https://github.com/termux/termux-app/releases/download/${{ env.TERMUX }}/termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
-            android-commands.sh snapshot termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
+            ./android-commands.sh snapshot termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
             adb -s emulator-5556 emu avd snapshot save ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
             echo "Emulator image created."
             pkill -9 qemu-system-x86_64
@@ -72,4 +73,4 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -snapshot ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
           script: |
-            android-commands.sh test
+            ./android-commands.sh test
