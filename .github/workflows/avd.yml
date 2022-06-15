@@ -27,7 +27,6 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [30]
-        target: [default]
         arch: [armeabi-v7a, arm64-v8a] #x86_64, x86]
     env:
       TERMUX: v0.118.0
@@ -49,16 +48,16 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
-          arch: arm64-v8a
+          arch: x86
           ram-size: 2048M
           disk-size: 5120M
+          target: google_apis
           force-avd-creation: true
           emulator-options: -no-snapshot-load -noaudio -no-boot-anim -camera-back none
           script: |
             wget https://github.com/termux/termux-app/releases/download/${{ env.TERMUX }}/termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
             ./android-commands.sh snapshot termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
-            adb -s emulator-5554 emu avd snapshot save ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
+            adb -s emulator-5556 emu avd snapshot save ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
             echo "Emulator image created."
             pkill -9 qemu-system-x86_64
 
