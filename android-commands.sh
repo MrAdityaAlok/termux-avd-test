@@ -29,6 +29,7 @@ launch_termux() {
 	while ! adb shell 'ls /sdcard/launch.probe' 2> /dev/null; do
 		echo "waiting for launch.probe"
 		sleep 5
+		adb logcat --pid="$(adb shell pidof -s com.termux)" &
 		adb shell input text 'touch\ /sdcard/launch.probe' && hit_enter
 	done
 	echo "found launch.probe"
