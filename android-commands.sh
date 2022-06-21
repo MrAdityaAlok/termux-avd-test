@@ -25,7 +25,6 @@ launch_termux() {
 		echo "failed to launch termux"
 		exit 1
 	fi
-	adb logcat &
 	# the emulator can sometimes be a little slow to launch the app
 	while ! adb shell 'ls /sdcard/launch.probe' 2> /dev/null; do
 		echo "waiting for launch.probe"

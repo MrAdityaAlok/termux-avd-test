@@ -27,7 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [31]
-        arch: [armeabi-v7a, arm64-v8a] #x86_64, x86]
+        arch: [armeabi-v7a, arm64-v8a] #x86_64_64, x86_64]
     env:
       TERMUX: v0.118.0
     steps:
@@ -48,7 +48,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86
+          arch: x86_64
           ram-size: 2048M
           disk-size: 5120M
           profile: Galaxy Nexus
@@ -69,7 +69,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis
-          arch: x86
+          arch: x86_64
           ram-size: 2048M
           disk-size: 5120M
           profile: Galaxy Nexus
