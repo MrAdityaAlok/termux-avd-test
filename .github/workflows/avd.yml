@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [30]
+        api-level: [31]
         arch: [armeabi-v7a, arm64-v8a] #x86_64, x86]
     env:
       TERMUX: v0.118.0
@@ -48,12 +48,15 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86_64
+          arch: x86
           ram-size: 2048M
           disk-size: 5120M
+          profile: Galaxy Nexus
+          cores: 2
+          sdcard-path-or-size: 100M
           target: google_apis
           force-avd-creation: true
-          emulator-options: -no-snapshot-load -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-load
           script: |
             wget https://github.com/termux/termux-app/releases/download/${{ env.TERMUX }}/termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
             ./android-commands.sh snapshot termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
@@ -65,11 +68,14 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
-          arch: ${{ matrix.arch }}
+          target: google_apis
+          arch: x86
           ram-size: 2048M
           disk-size: 5120M
+          profile: Galaxy Nexus
+          cores: 2
+          sdcard-path-or-size: 100M
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -snapshot ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -snapshot ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
           script: |
             ./android-commands.sh test
