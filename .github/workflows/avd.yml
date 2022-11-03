@@ -45,37 +45,30 @@ jobs:
 
       - name: Create and cache emulator image
         if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: ReactiveCircus/android-emulator-runner@v2.27.0
+        uses: ReactiveCircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
-          ram-size: 2048M
-          disk-size: 5120M
-          profile: Galaxy Nexus
           cores: 4
-          sdcard-path-or-size: 100M
           target: google_apis
-          force-avd-creation: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-load
+          force-avd-creation: false
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             wget https://github.com/termux/termux-app/releases/download/${{ env.TERMUX }}/termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
             ./android-commands.sh snapshot termux-app_${{ env.TERMUX }}+github-debug_${{ matrix.arch }}.apk
-            adb -s emulator-5556 emu avd snapshot save ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
+            # adb -s emulator-5556 emu avd snapshot save ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
             echo "Emulator image created."
-            pkill -9 qemu-system-x86_64
+            # pkill -9 qemu-system-x86_64
 
       - name: Build and Test on Android
-        uses: ReactiveCircus/android-emulator-runner@v2.27.0
+        uses: ReactiveCircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
-          ram-size: 2048M
-          disk-size: 5120M
-          profile: Galaxy Nexus
           cores: 4
-          sdcard-path-or-size: 100M
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -snapshot ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
-          script: |
-            ./android-commands.sh test
+          disable-animations: true
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: "./android-commands.sh test"
