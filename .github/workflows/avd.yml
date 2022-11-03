@@ -45,14 +45,14 @@ jobs:
 
       - name: Create and cache emulator image
         if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: ReactiveCircus/android-emulator-runner@v2.27.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           ram-size: 2048M
           disk-size: 5120M
           profile: Galaxy Nexus
-          cores: 2
+          cores: 4
           sdcard-path-or-size: 100M
           target: google_apis
           force-avd-creation: true
@@ -65,7 +65,7 @@ jobs:
             pkill -9 qemu-system-x86_64
 
       - name: Build and Test on Android
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: ReactiveCircus/android-emulator-runner@v2.27.0
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis
@@ -73,7 +73,7 @@ jobs:
           ram-size: 2048M
           disk-size: 5120M
           profile: Galaxy Nexus
-          cores: 2
+          cores: 4
           sdcard-path-or-size: 100M
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -snapshot ${{ matrix.api-level }}-${{ matrix.arch }}+termux-${{ env.TERMUX }}
